@@ -1,5 +1,6 @@
 package ichack16.getridofyoshit;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.hardware.Camera;
 import android.view.SurfaceHolder;
@@ -8,6 +9,8 @@ import android.view.SurfaceView;
 import java.io.IOException;
 
 /** A basic Camera preview class */
+@SuppressWarnings("deprecation")
+@SuppressLint("ViewConstructor")
 public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback {
     private SurfaceHolder mHolder;
     private Camera mCamera;
@@ -29,9 +32,7 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
         try {
             mCamera.setPreviewDisplay(holder);
             mCamera.startPreview();
-        } catch (IOException e) {
-        } catch (NullPointerException e) {
-
+        } catch (IOException | NullPointerException ignored) {
         }
     }
 
@@ -63,7 +64,7 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
             mCamera.setPreviewDisplay(mHolder);
             mCamera.startPreview();
 
-        } catch (Exception e) {
+        } catch (Exception ignored) {
         }
     }
 }
