@@ -3,6 +3,7 @@ package ichack16.getridofyoshit;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.hardware.Camera;
+import android.net.Uri;
 import android.provider.MediaStore;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -19,6 +20,8 @@ import android.widget.FrameLayout;
 public class GiveCameraView extends AppCompatActivity {
     private Camera mCamera;
     private CameraPreview mPreview;
+    private Uri fileUri;
+
     /**
      * Whether or not the system UI should be auto-hidden after
      * {@link #AUTO_HIDE_DELAY_MILLIS} milliseconds.
@@ -83,6 +86,17 @@ public class GiveCameraView extends AppCompatActivity {
     };
 
     @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == 100) {
+            if (resultCode == RESULT_OK) {
+                Intent imageCaptured = new Intent (this, DescribeItem.class);
+                imageCaptured.putExtra("image", data.getData());
+                startActivity(imageCaptured);
+            }
+        }
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
@@ -100,8 +114,8 @@ public class GiveCameraView extends AppCompatActivity {
         FrameLayout preview = (FrameLayout) findViewById(R.id.camera_preview);
         preview.addView(mPreview);
 
-        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        startActivityForResult(intent, 0);
+        Intent captureImage = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        startActivityForResult(captureImage, 100);
     }
 
     /** A safe way to get an instance of the Camera object. */
