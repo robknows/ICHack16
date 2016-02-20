@@ -1,3 +1,4 @@
+import json
 import requests
 
 from django.http import HttpResponse
@@ -9,8 +10,7 @@ ELASTIC_URL = (
     "https://search-getridofyoshit-mwboftivifwhy2cwtkdqnsc2fy."
     "eu-west-1.es.amazonaws.com/"
 )
-INDEX_TYPE = "test/stuff/"
-
+INDEX_TYPE = "test4/stuff/"
 
 @csrf_exempt
 def add(req):
@@ -24,4 +24,27 @@ def add(req):
 
 @csrf_exempt
 def search(req):
-    return HttpResponse("This is a search request")
+    location = json.loads(req.body.decode("utf-8"))["location"]
+
+    query = {
+        "query": {
+            "filtered": {
+                "query": {
+                    "match_all": {}
+                },
+                "filter": {
+                    "geo_distance": {
+                        "distance": "20km",
+                        "location": location
+                    }
+                }
+            }
+        }
+    }
+
+    res = requests.post(
+        ELASTIC_URL + INDEX_TYPE + "_search?pretty=true",
+        data=json.dumps(query),
+    )
+
+    return HttpResponse(res.text)
