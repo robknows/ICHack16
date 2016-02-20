@@ -131,7 +131,7 @@ public class QueryServer {
     } catch (Exception e) {
       e.printStackTrace();
     }
-    return null;
     
+    return found;
   }
 }
