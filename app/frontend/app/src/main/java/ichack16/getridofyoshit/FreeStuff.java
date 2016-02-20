@@ -68,11 +68,11 @@ public class FreeStuff {
         baos.toByteArray(), Base64.DEFAULT);
 
     sb.append("{\n");
-    sb.append("'image': '").append(encodedImage).append("',\n");
-    sb.append("'description': '").append(description).append("',\n");
-    sb.append("'location': ").append(location).append(",\n");
-    sb.append("'name': '").append(name).append("'\n");
-    sb.append("'telephoneNumber': '").append(telephoneNumber).append("'\n}");
+    sb.append("\"image\": \"").append(encodedImage).append("\",\n");
+    sb.append("\"description\": '").append(description).append("\",\n");
+    sb.append("\"location\": ").append(location).append(",\n");
+    sb.append("\"name\"': \"").append(name).append("\"\n");
+    sb.append("\"telephoneNumber\": \"").append(telephoneNumber).append("\"\n}");
 
     return sb.toString();
   }

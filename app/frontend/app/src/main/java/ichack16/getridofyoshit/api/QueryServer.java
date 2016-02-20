@@ -1,8 +1,11 @@
 package ichack16.getridofyoshit.api;
 
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
@@ -54,7 +57,7 @@ public class QueryServer {
 
   private String queryClose(Location location) {
     try {
-      URL addURL = new URL(serverURL + ADD_API);
+      URL addURL = new URL(serverURL + SEARCH_API);
       HttpURLConnection conn = (HttpURLConnection) addURL.openConnection();
 
       conn.setRequestMethod("POST");
@@ -67,16 +70,37 @@ public class QueryServer {
       BufferedWriter writer = new BufferedWriter(
           new OutputStreamWriter(out, "UTF-8"));
 
-      writer.write("{ 'location': " + location + "}");
+      writer.write("{ \"location\": " + location + "}");
       writer.flush();
       writer.close();
 
       conn.connect();
 
-      return conn.getResponseMessage();
+      InputStream in = conn.getInputStream();
+      BufferedReader read = new BufferedReader(new InputStreamReader(in, "UTF-8"));
+
+      StringBuilder response = new StringBuilder();
+
+      String line;
+
+      while ( (line = read.readLine()) != null) {
+        response.append(line);
+      }
+
+      return response.toString();
+
     } catch (Exception e) {
-      return "FAIL";
+      e.printStackTrace();
+      return ""; 
     }
+  }
+
+  public static void main(String[] args) {
+    Location testLoc = new Location(61.2180556, -149.9002778);
+
+    QueryServer qs = new QueryServer("http://localhost:8000");
+
+    System.out.println(qs.queryClose(testLoc));
   }
 
 }
