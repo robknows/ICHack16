@@ -24,10 +24,9 @@ public class DescribeItem extends AppCompatActivity {
     private void scaleDown(ImageView iv, Uri uri) {
         Bitmap decodedFile = BitmapFactory.decodeFile(removePrefixFromFilename(uri.toString()));
         int screenHeight = getResources().getDisplayMetrics().heightPixels;
-        int halfHeight = screenHeight / 4;
-        System.out.println(halfHeight);
-        int newHeight = (int) (decodedFile.getHeight() * halfHeight / decodedFile.getWidth());
-        Bitmap scaledBitmap = Bitmap.createScaledBitmap(decodedFile, halfHeight, newHeight, true);
+        int desiredWidth = screenHeight / 4;
+        int newHeight = (decodedFile.getHeight() * desiredWidth / decodedFile.getWidth());
+        Bitmap scaledBitmap = Bitmap.createScaledBitmap(decodedFile, desiredWidth, newHeight, true);
         iv.setImageBitmap(scaledBitmap);
     }
 
