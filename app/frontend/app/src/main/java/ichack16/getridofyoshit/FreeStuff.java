@@ -61,11 +61,12 @@ public class FreeStuff {
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    ByteArrayOutputStream baos = new ByteArrayOutputStream();
-    image.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+    ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+    int MAXIMUM_QUALITY = 100;
+    image.compress(Bitmap.CompressFormat.JPEG, MAXIMUM_QUALITY, byteArrayOutputStream);
 
     String encodedImage = Base64.encodeToString(
-        baos.toByteArray(), Base64.DEFAULT);
+        byteArrayOutputStream.toByteArray(), Base64.DEFAULT);
 
     sb.append("{\n");
     sb.append("\"image\": \"").append(encodedImage).append("\",\n");
