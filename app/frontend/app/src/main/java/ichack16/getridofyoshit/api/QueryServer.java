@@ -2,17 +2,20 @@ package ichack16.getridofyoshit.api;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.util.Base64;
 
 import ichack16.getridofyoshit.FreeStuff;
@@ -91,16 +94,44 @@ public class QueryServer {
 
     } catch (Exception e) {
       e.printStackTrace();
-      return ""; 
     }
   }
 
-  public static void main(String[] args) {
-    Location testLoc = new Location(61.2180556, -149.9002778);
+  public List<FreeStuff> getClose(Location location) {
+    List<FreeStuff> found = new ArrayList<FreeStuff>();
 
-    QueryServer qs = new QueryServer("http://ec2-52-30-60-12.eu-west-1.compute.amazonaws.com");
+    String res = queryClose(location);
 
-    System.out.println(qs.queryClose(testLoc));
+    try {
+      JSONObject jsonObject = new JSONObject(res);
+      JSONObject hits = jsonObject.getJSONObject("hits");
+      JSONArray actualhits = hits.getJSONArray("hits");
+
+      for (int i = 0; i < actualhits.length(); i++) {
+        JSONObject obj = actualhits.getJSONObject(i);
+        JSONObject data = obj.getJSONObject("_source");
+
+        String description = data.getString("description");
+        String name = data.getString("name");
+        String telephoneNumber = data.getString("telephoneNumber");
+
+        JSONObject jsonlocation = data.getJSONObject("location");
+
+        Location thisLocation = new Location(
+            jsonlocation.getDouble("lat"), jsonlocation.getDouble("lon"));
+
+        byte[] decodedimage = Base64.decode(data.getString("image"), 0);
+
+        Bitmap image = BitmapFactory.decodeByteArray(
+            decodedimage, 0, decodedimage.length);
+
+        found.add(new FreeStuff(
+              image, name, description, telephoneNumber, thisLocation));
+      }
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+    return null;
+    
   }
-
 }
