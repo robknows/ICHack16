@@ -25,25 +25,23 @@ def add(req):
 
 @csrf_exempt
 def search(req):
-    print(req.body)
     location = json.loads(req.body.decode("utf-8"))["location"]
 
     query = {
         "query": {
-            "filtered" : {
-                "query" : {
-                    "match_all" : {}
+            "filtered": {
+                "query": {
+                    "match_all": {}
                 },
-                "filter" : {
-                    "geo_distance" : {
-                            "distance" : "20km",
-                            "location" : location
+                "filter": {
+                    "geo_distance": {
+                        "distance": "20km",
+                        "location": location
                     }
                 }
             }
         }
     }
-
 
     res = requests.post(
         ELASTIC_URL + INDEX_TYPE + "_search?pretty=true",
