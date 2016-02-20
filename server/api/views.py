@@ -25,7 +25,7 @@ def add(req):
 
 @csrf_exempt
 def search(req):
-    location = json.loads(req.body)["location"]
+    location = json.loads(req.body.decode("utf-8")["location"]
 
     query = {
         "query": {
