@@ -1,18 +1,24 @@
 package ichack16.getridofyoshit;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
+import android.hardware.Camera;
+import android.provider.MediaStore;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.FrameLayout;
 
 /**
  * An example full-screen activity that shows and hides the system UI (i.e.
  * status bar and navigation/system bar) with user interaction.
  */
 public class GiveCameraView extends AppCompatActivity {
+    private Camera mCamera;
+    private CameraPreview mPreview;
     /**
      * Whether or not the system UI should be auto-hidden after
      * {@link #AUTO_HIDE_DELAY_MILLIS} milliseconds.
@@ -90,8 +96,6 @@ public class GiveCameraView extends AppCompatActivity {
         setContentView(R.layout.activity_give_camera_view);
 
         mVisible = true;
-        mControlsView = findViewById(R.id.fullscreen_content_controls);
-        mContentView = findViewById(R.id.fullscreen_content);
 
 
         // Set up the user interaction to manually show or hide the system UI.
@@ -105,7 +109,25 @@ public class GiveCameraView extends AppCompatActivity {
         // Upon interacting with UI controls, delay any scheduled hide()
         // operations to prevent the jarring behavior of controls going away
         // while interacting with the UI.
-        findViewById(R.id.dummy_button).setOnTouchListener(mDelayHideTouchListener);
+
+        mCamera = getCameraInstance();
+        mPreview = new CameraPreview(this, mCamera);
+        FrameLayout preview = (FrameLayout) findViewById(R.id.camera_preview);
+        preview.addView(mPreview);
+        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        startActivityForResult(intent, 250);
+    }
+
+    /** A safe way to get an instance of the Camera object. */
+    public static Camera getCameraInstance(){
+        Camera c = null;
+        try {
+            c = Camera.open(); // attempt to get a Camera instance
+        }
+        catch (Exception e){
+            // Camera is not available (in use or does not exist)
+        }
+        return c; // returns null if camera is unavailable
     }
 
     @Override
