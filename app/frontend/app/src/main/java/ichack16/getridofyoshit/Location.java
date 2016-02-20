@@ -1,8 +1,7 @@
 package ichack16.getridofyoshit;
 
-/**
- * Created by fangyi on 20/02/2016.
- */
+import com.google.android.gms.maps.model.LatLng;
+
 public class Location {
     private final double latitude;
     private final double longitude;
@@ -10,18 +9,26 @@ public class Location {
     public Location(double latitude, double longitude) {
         this.latitude = latitude;
         this.longitude = longitude;
-  }
+    }
 
-  public double getLatitude() {
-    return latitude;
-  }
+    public double getLatitude() {
+        return latitude;
+    }
 
-  public double getLongitude() {
-    return longitude;
-  }
+    public double getLongitude() {
+        return longitude;
+    }
 
-  @Override
-  public String toString() {
-    return "{ \"lon\": " + longitude + ", \"lat\": " + latitude + "}";
-  }
+    public static Location fromGoogleLocation(android.location.Location location) {
+        return new Location(location.getLatitude(), location.getLongitude());
+    }
+
+    public LatLng toLatLng() {
+        return new LatLng(latitude, longitude);
+    }
+
+    @Override
+    public String toString() {
+        return "{ \"lon\": " + longitude + ", \"lat\": " + latitude + "}";
+    }
 }

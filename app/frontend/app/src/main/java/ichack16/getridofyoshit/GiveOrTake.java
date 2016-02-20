@@ -43,4 +43,10 @@ public class GiveOrTake extends AppCompatActivity {
         Intent intent = new Intent(this, GiveCameraView.class);
         startActivity(intent);
     }
+
+    public void onTakeButtonPressed(View view) {
+        Intent intent = new Intent(this, TakeMapView.class);
+        startActivity(intent);
+    }
+
 }
