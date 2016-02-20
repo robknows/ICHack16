@@ -92,7 +92,7 @@ public class GiveCameraView extends AppCompatActivity {
             sb.append(getExternalFilesDir(Environment.DIRECTORY_PICTURES));
             sb.append(File.separator);
             sb.append("IMG_");
-            String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+            @SuppressLint("SimpleDateFormat") String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
             sb.append(timeStamp);
             sb.append(".jpg");
             filePath = sb.toString();

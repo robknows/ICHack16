@@ -2,14 +2,11 @@ package ichack16.getridofyoshit;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.widget.ImageView;
-
-import java.io.File;
 
 public class DescribeItem extends AppCompatActivity {
 
@@ -20,14 +17,14 @@ public class DescribeItem extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         ImageView imageView = (ImageView) findViewById(R.id.item_image);
-        Uri imageUri = (Uri) getIntent().getParcelableExtra("image");
+        Uri imageUri = getIntent().getParcelableExtra("image");
         scaleDown(imageView, imageUri);
     }
 
     private void scaleDown(ImageView iv, Uri uri) {
         System.out.println(uri.toString());
         Bitmap decodedFile = BitmapFactory.decodeFile(removePrefixFromFilename(uri.toString()));
-        int newHeight = (int) ( decodedFile.getHeight() * (512.0 / decodedFile.getWidth()) );
+        int newHeight = (int) (decodedFile.getHeight() * (512.0 / decodedFile.getWidth()));
         Bitmap scaledBitmap = Bitmap.createScaledBitmap(decodedFile, 512, newHeight, true);
         iv.setImageBitmap(scaledBitmap);
     }
