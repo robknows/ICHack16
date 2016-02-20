@@ -98,7 +98,7 @@ public class QueryServer {
   public static void main(String[] args) {
     Location testLoc = new Location(61.2180556, -149.9002778);
 
-    QueryServer qs = new QueryServer("http://localhost:8000");
+    QueryServer qs = new QueryServer("http://ec2-52-30-60-12.eu-west-1.compute.amazonaws.com");
 
     System.out.println(qs.queryClose(testLoc));
   }
