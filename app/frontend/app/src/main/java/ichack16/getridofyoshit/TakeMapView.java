@@ -1,6 +1,7 @@
 package ichack16.getridofyoshit;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentActivity;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -15,12 +16,11 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+@SuppressWarnings("deprecation")
 public class TakeMapView extends FragmentActivity implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener {
 
 
-    private GoogleMap mMap;
     protected GoogleApiClient mGoogleApiClient;
-    private Location lastLocation;
     private FusedLocationProviderApi fusedLocationApi;
     private LocationRequest locationRequest;
 
@@ -33,14 +33,14 @@ public class TakeMapView extends FragmentActivity implements OnMapReadyCallback,
     public void onConnected(Bundle bundle) {
         try {
             fusedLocationApi.requestLocationUpdates(mGoogleApiClient, locationRequest, this);
-            lastLocation = getLastLocation();
+            getLastLocation();
         } catch (SecurityException e) {
             System.out.println("Permission denied!");
         }
     }
 
     @Override
-    public void onConnectionFailed(ConnectionResult connectionResult) {
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
         System.out.println("failed");
     }
 
@@ -78,18 +78,16 @@ public class TakeMapView extends FragmentActivity implements OnMapReadyCallback,
      */
     @Override
     public void onMapReady(GoogleMap googleMap) {
-        mMap = googleMap;
         buildGoogleApiClient();
         mGoogleApiClient.connect();
         // Add a marker in Sydney and move the camera
         try {
             googleMap.setMyLocationEnabled(true);
             googleMap.getMyLocation();
-        } catch (SecurityException e) {
-
+        } catch (SecurityException ignored) {
         }
-        mMap.addMarker(new MarkerOptions().position(getLastLocation().toLatLng()).title("Me"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(getLastLocation().toLatLng()));
+        googleMap.addMarker(new MarkerOptions().position(getLastLocation().toLatLng()).title("Me"));
+        googleMap.moveCamera(CameraUpdateFactory.newLatLng(getLastLocation().toLatLng()));
     }
 
     protected synchronized void buildGoogleApiClient() {
