@@ -1,8 +1,6 @@
 package ichack16.getridofyoshit;
 
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
@@ -12,14 +10,18 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import ichack16.getridofyoshit.api.QueryServer;
 
 public class TakeMapView extends FragmentActivity implements OnMapReadyCallback {
     private GoogleMap map;
+    private Map<Marker, FreeStuff> markers = new HashMap<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,10 +44,10 @@ public class TakeMapView extends FragmentActivity implements OnMapReadyCallback 
     @Override
     public void onMapReady(GoogleMap googleMap) {
         map = googleMap;
-
+        map.setOnInfoWindowClickListener(new InfoWindowClickListener());
         LatLng currentLocation = getCurrentLocation().toLatLng();
 
-        new ReadFromServer().execute(map);
+        new ReadFromServer(markers).execute(map);
 
         map.moveCamera(CameraUpdateFactory.newLatLng(currentLocation));
     }
@@ -59,11 +61,25 @@ public class TakeMapView extends FragmentActivity implements OnMapReadyCallback 
         intent.putExtra("Item", item);
         startActivity(intent);
     }
+
+    private class InfoWindowClickListener implements GoogleMap.OnInfoWindowClickListener {
+
+        @Override
+        public void onInfoWindowClick(Marker marker) {
+            goToDetailScreen(markers.get(marker));
+        }
+    }
+
 }
 
 class ReadFromServer extends AsyncTask<GoogleMap, Void, List<FreeStuff>> {
 
     private GoogleMap map;
+    private Map<Marker, FreeStuff> markers;
+
+    public ReadFromServer(Map<Marker, FreeStuff> markers) {
+        this.markers = markers;
+    }
 
     @Override
     protected List<FreeStuff> doInBackground(GoogleMap... params) {
@@ -80,7 +96,8 @@ class ReadFromServer extends AsyncTask<GoogleMap, Void, List<FreeStuff>> {
             LatLng position = freeItem.getLocation().toLatLng();
             String description = freeItem.getDescription();
             assert(position != null);
-            map.addMarker(new MarkerOptions().position(position).title(description));
+            Marker marker = map.addMarker(new MarkerOptions().position(position).title(description));
+            markers.put(marker, freeItem);
         }
     }
 }
