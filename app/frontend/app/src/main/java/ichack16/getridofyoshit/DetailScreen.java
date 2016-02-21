@@ -46,6 +46,7 @@ public class DetailScreen extends AppCompatActivity {
 
             ImageView imageview = (ImageView) findViewById(R.id.image);
             imageview.setImageBitmap(item.getImage());
+            imageview.setScaleType(ImageView.ScaleType.FIT_CENTER);
 
             TextView descriptionview = (TextView) findViewById(R.id.description);
             descriptionview.setText(item.getDescription());

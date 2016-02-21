@@ -15,14 +15,14 @@
         android:layout_height="fill_parent"
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
-        android:weightSum="4">
+        android:weightSum="10">
 
         <ImageView
-            android:layout_width="wrap_content"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:id="@+id/image"
             android:layout_gravity="center_horizontal"
-            android:layout_weight="1"
+            android:layout_weight="7"
             android:contentDescription="Item image" />
 
         <TextView

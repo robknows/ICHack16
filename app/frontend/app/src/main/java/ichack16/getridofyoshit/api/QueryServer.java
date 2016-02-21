@@ -43,6 +43,8 @@ public class QueryServer {
       OutputStream out = connection.getOutputStream();
       BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(out, "UTF-8"));
 
+      System.out.println(newStuff.toString());
+
       writer.write(newStuff.toString());
       writer.flush();
       writer.close();

@@ -19,12 +19,25 @@ public class FreeStuff {
   private final Location location;
 
   public FreeStuff(Bitmap image, String name, String description, String telephoneNumber, Location location) {
-    this.image = Bitmap.createScaledBitmap(image, 400, 400, true);
+    this.image = resizeImage(image);
     this.name = name;
     this.description = description;
     this.telephoneNumber = telephoneNumber;
     this.location = location;
   }
+
+    private Bitmap resizeImage(Bitmap image) {
+        int maxSide = Math.max(image.getWidth(), image.getHeight());
+
+        double scale = 200 / (double)maxSide;
+
+        int newWidth = (int)((double)image.getWidth() * scale);
+        int newHeight = (int)((double)image.getHeight() * scale);
+
+        System.out.println(scale + " " + newWidth + " " + newHeight);
+
+        return Bitmap.createScaledBitmap(image, newWidth, newHeight, true);
+    }
 
   /**
    * @return the image
@@ -65,10 +78,12 @@ public class FreeStuff {
   public String toString() {
     StringBuilder sb = new StringBuilder();
     ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-    image.compress(Bitmap.CompressFormat.JPEG, 10, byteArrayOutputStream);
+    image.compress(Bitmap.CompressFormat.JPEG, 70, byteArrayOutputStream);
 
     String encodedImage = Base64.encodeToString(
-        byteArrayOutputStream.toByteArray(), Base64.DEFAULT);
+        byteArrayOutputStream.toByteArray(), Base64.NO_WRAP);
+
+    System.out.println(encodedImage.length());
 
     sb.append("{\n");
     sb.append("\"image\": \"").append(StringEscapeUtils.escapeJson(encodedImage)).append("\",\n");
