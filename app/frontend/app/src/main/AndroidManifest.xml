@@ -36,12 +36,12 @@
         <activity
             android:name=".GiveCameraView"
             android:configChanges="orientation|keyboardHidden|screenSize"
-            android:label="@string/title_activity_give_camera_view"
+            android:label="Capture"
             android:theme="@style/FullscreenTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
+                <category android:name="android.intent.category.ALTERNATIVE" />
             </intent-filter>
         </activity>
         <activity
@@ -70,10 +70,5 @@
         <activity
             android:name=".DetailScreen"
             android:label="Details" />
-        <activity
-            android:name=".ThankYou"
-            android:label="@string/title_activity_thank_you"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
-
 </manifest>

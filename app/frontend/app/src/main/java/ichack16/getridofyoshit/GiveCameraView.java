@@ -142,7 +142,6 @@ public class GiveCameraView extends AppCompatActivity {
         captureImage.putExtra(MediaStore.EXTRA_OUTPUT, fileUri);
         startActivityForResult(captureImage, FOR_AN_IMAGE);
     }
-
     private Uri getOutputMediaFileUri(int type) {
         return Uri.fromFile(getOutputMediaFile(type));
     }
@@ -179,7 +178,6 @@ public class GiveCameraView extends AppCompatActivity {
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
-
         // Trigger the initial hide() shortly after the activity has been
         // created, to briefly hint to the user that UI controls
         // are available.
@@ -207,6 +205,4 @@ public class GiveCameraView extends AppCompatActivity {
         mHideHandler.removeCallbacks(mHideRunnable);
         mHideHandler.postDelayed(mHideRunnable, delayMillis);
     }
-
-
 }
