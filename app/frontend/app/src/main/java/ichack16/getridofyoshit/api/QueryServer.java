@@ -67,8 +67,8 @@ public class QueryServer {
     conn.setRequestMethod("POST");
     conn.setDoInput(true);
     conn.setDoOutput(true);
-    conn.setReadTimeout(10000);
-    conn.setConnectTimeout(15000);
+    conn.setReadTimeout(30000);
+    conn.setConnectTimeout(30000);
   }
 
   private String queryClose(Location location) {
