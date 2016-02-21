@@ -48,7 +48,7 @@ class AddToServer extends AsyncTask<FreeStuff, Void, String> {
     @Override
     protected String doInBackground(FreeStuff... freeStuff) {
         QueryServer qs = new QueryServer("http://ec2-52-30-60-12.eu-west-1.compute.amazonaws.com");
-        String ret = qs.writeToServer(freeStuff[0]);
+        String ret = qs.addStuff(freeStuff[0]);
         System.out.println(ret);
         return ret;
     }

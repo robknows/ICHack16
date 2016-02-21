@@ -1,104 +1,138 @@
 package ichack16.getridofyoshit.api;
 
-import android.support.annotation.NonNull;
-
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
-import java.net.ProtocolException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.util.Base64;
 
 import ichack16.getridofyoshit.FreeStuff;
 import ichack16.getridofyoshit.Location;
 
 public class QueryServer {
 
-    private final String serverURL;
-    private static final String ADD_API = "/add/";
-    private static final String SEARCH_API = "/search/";
+  private final String serverURL;
+  private static final String ADD_API = "/add/";
+  private static final String SEARCH_API = "/search/";
 
-    public QueryServer(String serverURL) {
-        this.serverURL = serverURL;
+  public QueryServer(String serverURL) {
+    this.serverURL = serverURL;
+  }
+
+  public String addStuff(FreeStuff newStuff) {
+    try {
+      URL addURL = new URL(serverURL + ADD_API);
+      HttpURLConnection conn = (HttpURLConnection) addURL.openConnection();
+
+      conn.setRequestMethod("POST");
+      conn.setDoInput(true);
+      conn.setDoOutput(true);
+      conn.setReadTimeout(10000);
+      conn.setConnectTimeout(15000);
+
+      OutputStream out = conn.getOutputStream();
+      BufferedWriter writer = new BufferedWriter(
+          new OutputStreamWriter(out, "UTF-8"));
+
+      writer.write(newStuff.toString());
+      writer.flush();
+      writer.close();
+
+      conn.connect();
+
+      return conn.getResponseMessage();
+    } catch (Exception e) {
+      return "FAIL";
     }
+  }
 
-    public String writeToServer(FreeStuff dataToAdd) {
-        try {
-            URL addURL = new URL(serverURL + ADD_API);
-            HttpURLConnection conn = (HttpURLConnection) addURL.openConnection();
-            setUpRequestConditions(conn);
+  private String queryClose(Location location) {
+    try {
+      URL addURL = new URL(serverURL + SEARCH_API);
+      HttpURLConnection conn = (HttpURLConnection) addURL.openConnection();
 
-            BufferedWriter writer = createBufferedWriter(conn);
-            writer.write(dataToAdd.toString());
-            writer.flush();
-            writer.close();
+      conn.setRequestMethod("POST");
+      conn.setDoInput(true);
+      conn.setDoOutput(true);
+      conn.setReadTimeout(10000);
+      conn.setConnectTimeout(15000);
 
-            conn.connect();
+      OutputStream out = conn.getOutputStream();
+      BufferedWriter writer = new BufferedWriter(
+          new OutputStreamWriter(out, "UTF-8"));
 
-            InputStream in = conn.getInputStream();
-            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(in, "UTF-8"));
-            return buildResponse(bufferedReader);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return "FAIL";
-        }
+      writer.write("{ \"location\": " + location + "}");
+      writer.flush();
+      writer.close();
+
+      conn.connect();
+
+      InputStream in = conn.getInputStream();
+      BufferedReader read = new BufferedReader(new InputStreamReader(in, "UTF-8"));
+
+      StringBuilder response = new StringBuilder();
+
+      String line;
+
+      while ( (line = read.readLine()) != null) {
+        response.append(line);
+      }
+
+      return response.toString();
+
+    } catch (Exception e) {
+      e.printStackTrace();
+      return ""; 
     }
+  }
 
-    @NonNull
-    private BufferedWriter createBufferedWriter(HttpURLConnection conn) throws IOException {
-        OutputStream out = conn.getOutputStream();
-        return new BufferedWriter(new OutputStreamWriter(out, "UTF-8"));
+  public List<FreeStuff> getClose(Location location) {
+    List<FreeStuff> found = new ArrayList<FreeStuff>();
+
+    String res = queryClose(location);
+
+    try {
+      JSONObject jsonObject = new JSONObject(res);
+      JSONObject hits = jsonObject.getJSONObject("hits");
+      JSONArray actualhits = hits.getJSONArray("hits");
+
+      for (int i = 0; i < actualhits.length(); i++) {
+        JSONObject obj = actualhits.getJSONObject(i);
+        JSONObject data = obj.getJSONObject("_source");
+
+        String description = data.getString("description");
+        String name = data.getString("name");
+        String telephoneNumber = data.getString("telephoneNumber");
+
+        JSONObject jsonlocation = data.getJSONObject("location");
+
+        Location thisLocation = new Location(
+            jsonlocation.getDouble("lat"), jsonlocation.getDouble("lon"));
+
+        byte[] decodedimage = Base64.decode(data.getString("image"), 0);
+
+        Bitmap image = BitmapFactory.decodeByteArray(
+            decodedimage, 0, decodedimage.length);
+
+        found.add(new FreeStuff(
+              image, name, description, telephoneNumber, thisLocation));
+      }
+    } catch (Exception e) {
+      e.printStackTrace();
     }
-
-    private String queryClose(Location location) {
-        try {
-            URL addURL = new URL(serverURL + SEARCH_API);
-            HttpURLConnection conn = (HttpURLConnection) addURL.openConnection();
-
-            setUpRequestConditions(conn);
-
-            BufferedWriter writer = createBufferedWriter(conn);
-            writer.write("{ \"location\": " + location + "}");
-            writer.flush();
-            writer.close();
-
-            conn.connect();
-
-            InputStream in = conn.getInputStream();
-            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(in, "UTF-8"));
-            return buildResponse(bufferedReader);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return "";
-        }
-    }
-
-    private void setUpRequestConditions(HttpURLConnection conn) throws ProtocolException {
-        conn.setRequestMethod("POST");
-        conn.setDoInput(true);
-        conn.setDoOutput(true);
-        conn.setReadTimeout(10000);
-        conn.setConnectTimeout(15000);
-    }
-
-    @NonNull
-    private String buildResponse(BufferedReader bufferedReader) throws IOException {
-        StringBuilder response = new StringBuilder();
-        String line;
-        while ((line = bufferedReader.readLine()) != null) {
-            response.append(line);
-        }
-
-        return response.toString();
-    }
-
-    public static void main(String[] args) {
-        Location testLoc = new Location(61.2180556, -149.9002778);
-        QueryServer qs = new QueryServer("http://localhost:8000");
-        System.out.println(qs.queryClose(testLoc));
-    }
+    
+    return found;
+  }
 }
