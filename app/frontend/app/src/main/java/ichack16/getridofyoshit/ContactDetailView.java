@@ -22,6 +22,8 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
 
 import ichack16.getridofyoshit.api.QueryServer;
 
@@ -29,6 +31,7 @@ public class ContactDetailView extends AppCompatActivity implements OnMapReadyCa
 
     private GoogleApiClient mGoogleApiClient;
     private android.location.Location mLastLocation;
+    private LatLng finalLocation;
     private GoogleMap map;
 
     @Override
@@ -68,9 +71,18 @@ public class ContactDetailView extends AppCompatActivity implements OnMapReadyCa
             finish();
         }
 
-        LatLng currentLocation = new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude());
+        finalLocation = new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude());
 
-        map.moveCamera(CameraUpdateFactory.newLatLng(currentLocation));
+        final Marker marker = map.addMarker(new MarkerOptions().position(finalLocation).title("Your location"));
+
+        map.moveCamera(CameraUpdateFactory.newLatLngZoom(finalLocation, 15));
+        map.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
+            @Override
+            public void onMapClick(LatLng latLng) {
+                marker.setPosition(latLng);
+                finalLocation = latLng;
+            }
+        });
     }
 
     @Override
@@ -99,8 +111,8 @@ public class ContactDetailView extends AppCompatActivity implements OnMapReadyCa
         Uri imageUri = getIntent().getParcelableExtra("image");
         Bitmap image = BitmapFactory.decodeFile(DescribeItem.removePrefixFromFilename(imageUri.toString()));
         String contact = ((EditText) findViewById(R.id.text_telephone)).getText().toString();
-        double latitude = mLastLocation.getLatitude();
-        double longitude = mLastLocation.getLongitude();
+        double latitude = finalLocation.latitude;
+        double longitude = finalLocation.longitude;
         FreeStuff freeStuff = new FreeStuff(image, "", description, contact, new Location(latitude, longitude));
 
         new AddToServer().execute(freeStuff);
