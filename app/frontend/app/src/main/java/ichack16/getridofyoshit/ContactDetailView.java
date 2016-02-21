@@ -39,6 +39,12 @@ public class ContactDetailView extends AppCompatActivity implements OnMapReadyCa
         setContentView(R.layout.activity_contact_detail_view);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        initialiseGoogleApiClient();
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map_my_location);
+        mapFragment.getMapAsync(this);
+    }
+
+    private void initialiseGoogleApiClient() {
         if (mGoogleApiClient == null) {
             mGoogleApiClient = new GoogleApiClient.Builder(this)
                     .addConnectionCallbacks(this)
@@ -46,24 +52,19 @@ public class ContactDetailView extends AppCompatActivity implements OnMapReadyCa
                     .addApi(LocationServices.API)
                     .build();
         }
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map_my_location);
-        mapFragment.getMapAsync(this);
-
     }
 
     @Override
     public void onConnected(Bundle connectionHint) {
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this,
-                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 0
-            );
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
+        boolean fineLocationPermissionDenied = ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED;
+        boolean coarseLocationPermissionDenied = ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED;
+
+        if (fineLocationPermissionDenied && coarseLocationPermissionDenied) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 0);
         }
+
         mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
+
         if (mLastLocation == null) {
             System.out.println("Error shite");
             finish();
@@ -74,6 +75,7 @@ public class ContactDetailView extends AppCompatActivity implements OnMapReadyCa
         final Marker marker = map.addMarker(new MarkerOptions().position(finalLocation).title("Your location"));
 
         map.moveCamera(CameraUpdateFactory.newLatLngZoom(finalLocation, 15));
+
         map.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
             @Override
             public void onMapClick(LatLng latLng) {
@@ -85,12 +87,10 @@ public class ContactDetailView extends AppCompatActivity implements OnMapReadyCa
 
     @Override
     public void onConnectionSuspended(int i) {
-
     }
 
     @Override
     public void onConnectionFailed(ConnectionResult connectionResult) {
-
     }
 
     protected void onStart() {
@@ -109,9 +109,7 @@ public class ContactDetailView extends AppCompatActivity implements OnMapReadyCa
         Uri imageUri = getIntent().getParcelableExtra("image");
         Bitmap image = BitmapFactory.decodeFile(DescribeItem.removePrefixFromFilename(imageUri.toString()));
         String contact = ((EditText) findViewById(R.id.text_telephone)).getText().toString();
-        double latitude = finalLocation.latitude;
-        double longitude = finalLocation.longitude;
-        FreeStuff freeStuff = new FreeStuff(image, "", description, contact, new Location(latitude, longitude));
+        FreeStuff freeStuff = new FreeStuff(image, "", description, contact, new Location(finalLocation.latitude, finalLocation.longitude));
 
         new AddToServer().execute(freeStuff);
 
@@ -131,5 +129,4 @@ class AddToServer extends AsyncTask<FreeStuff, Void, String> {
         QueryServer qs = new QueryServer("http://ec2-52-30-60-12.eu-west-1.compute.amazonaws.com");
         return qs.addStuff(freeStuff[0]);
     }
-
 }
