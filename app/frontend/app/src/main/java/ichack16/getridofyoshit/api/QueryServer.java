@@ -39,8 +39,11 @@ public class QueryServer {
 
             conn.connect();
 
-            return conn.getResponseMessage();
+            InputStream in = conn.getInputStream();
+            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(in, "UTF-8"));
+            return buildResponse(bufferedReader);
         } catch (Exception e) {
+            e.printStackTrace();
             return "FAIL";
         }
     }

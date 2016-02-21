@@ -1,9 +1,11 @@
 package ichack16.getridofyoshit;
 
-import java.io.ByteArrayOutputStream;
-
 import android.graphics.Bitmap;
 import android.util.Base64;
+
+import org.apache.commons.lang3.StringEscapeUtils;
+
+import java.io.ByteArrayOutputStream;
 
 /**
  * Created by fangyi on 20/02/2016.
@@ -16,7 +18,7 @@ public class FreeStuff {
   private final Location location;
 
   public FreeStuff(Bitmap image, String name, String description, String telephoneNumber, Location location) {
-    this.image = image;
+    this.image = Bitmap.createScaledBitmap(image, 100, 100, true);
     this.name = name;
     this.description = description;
     this.telephoneNumber = telephoneNumber;
@@ -63,16 +65,16 @@ public class FreeStuff {
     StringBuilder sb = new StringBuilder();
     ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
     int MAXIMUM_QUALITY = 100;
-    image.compress(Bitmap.CompressFormat.JPEG, MAXIMUM_QUALITY, byteArrayOutputStream);
+    image.compress(Bitmap.CompressFormat.JPEG, 0, byteArrayOutputStream);
 
     String encodedImage = Base64.encodeToString(
         byteArrayOutputStream.toByteArray(), Base64.DEFAULT);
 
     sb.append("{\n");
-    sb.append("\"image\": \"").append(encodedImage).append("\",\n");
-    sb.append("\"description\": '").append(description).append("\",\n");
+    sb.append("\"image\": \"").append(StringEscapeUtils.escapeJson(encodedImage)).append("\",\n");
+    sb.append("\"description\": \"").append(StringEscapeUtils.escapeJson(description)).append("\",\n");
     sb.append("\"location\": ").append(location).append(",\n");
-    sb.append("\"name\"': \"").append(name).append("\"\n");
+    sb.append("\"name\": \"").append(name).append("\",\n");
     sb.append("\"telephoneNumber\": \"").append(telephoneNumber).append("\"\n}");
 
     return sb.toString();

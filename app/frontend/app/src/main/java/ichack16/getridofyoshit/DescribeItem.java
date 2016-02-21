@@ -1,11 +1,14 @@
 package ichack16.getridofyoshit;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageView;
 
 public class DescribeItem extends AppCompatActivity {
@@ -30,8 +33,15 @@ public class DescribeItem extends AppCompatActivity {
         iv.setImageBitmap(scaledBitmap);
     }
 
-    private String removePrefixFromFilename(String fileName) {
+    public static String removePrefixFromFilename(String fileName) {
         int NUMBER_OF_CHARACTERS_TO_REMOVE_MINUS_ONE = 6;
         return fileName.substring(NUMBER_OF_CHARACTERS_TO_REMOVE_MINUS_ONE);
+    }
+
+    public void onButtonContinuePressed (View view){
+        Intent intent = new Intent(this, ContactDetailView.class);
+        intent.putExtra("image", getIntent().getParcelableExtra("image"));
+        intent.putExtra("description", ((EditText) findViewById(R.id.item_description)).getText().toString());
+        startActivity(intent);
     }
 }
