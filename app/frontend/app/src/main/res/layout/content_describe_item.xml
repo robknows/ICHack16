@@ -17,7 +17,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:weightSum="1"
-        android:layout_alignParentTop="true">
+        android:layout_alignParentEnd="false">
 
         <ImageView
             android:layout_width="wrap_content"
@@ -37,17 +37,22 @@
             android:layout_alignParentEnd="true"
             android:hint="Enter the description of the item here"
             android:layout_gravity="center_horizontal"
-            android:layout_marginTop="5dp" />
+            android:layout_marginTop="10dp"
+            android:layout_weight="0.25"
+            android:gravity="bottom" />
 
         <Button
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Continue"
             android:id="@+id/button_continue"
             android:layout_alignTop="@+id/item_description"
             android:layout_centerHorizontal="true"
             android:layout_gravity="center_horizontal"
-            android:onClick="onButtonContinuePressed" />
+            android:onClick="onButtonContinuePressed"
+            android:clickable="false"
+            android:enabled="true"
+            android:layout_marginTop="10dp" />
 
     </LinearLayout>
 

@@ -137,17 +137,6 @@ public class GiveCameraView extends AppCompatActivity {
         FrameLayout preview = (FrameLayout) findViewById(R.id.camera_preview);
         preview.addView(mPreview);
 
-        Button captureButton = (Button) findViewById(R.id.button_capture);
-        captureButton.setOnClickListener(
-                new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        // get an image from the camera
-                        mCamera.takePicture(null, null, mPicture);
-                    }
-                }
-        );
-
         Intent captureImage = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         Uri fileUri = getOutputMediaFileUri(IMAGE_TYPE);
         captureImage.putExtra(MediaStore.EXTRA_OUTPUT, fileUri);
