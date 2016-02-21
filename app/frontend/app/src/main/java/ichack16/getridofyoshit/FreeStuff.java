@@ -6,11 +6,12 @@ import android.util.Base64;
 import org.apache.commons.lang3.StringEscapeUtils;
 
 import java.io.ByteArrayOutputStream;
+import java.io.Serializable;
 
 /**
  * Created by fangyi on 20/02/2016.
  */
-public class FreeStuff {
+public class FreeStuff implements Serializable {
   private final Bitmap image;
   private final String name;
   private final String description;

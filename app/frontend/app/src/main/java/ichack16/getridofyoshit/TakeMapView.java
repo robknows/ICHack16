@@ -1,5 +1,6 @@
 package ichack16.getridofyoshit;
 
+import android.content.Intent;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 
@@ -39,5 +40,11 @@ public class TakeMapView extends FragmentActivity implements OnMapReadyCallback 
         LatLng sydney = new LatLng(-34, 151);
         mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
         mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+    }
+
+    public void goToDetailScreen(FreeStuff item) {
+        Intent intent = new Intent(this, DetailScreen.class);
+        intent.putExtra("Item", item);
+        startActivity(intent);
     }
 }

@@ -9,6 +9,8 @@
     -->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
+    <uses-permission android:name="android.permission.CALL_PHONE" />
+
     <application
         android:allowBackup="true"
         android:debuggable="true"
@@ -68,7 +70,8 @@
         <activity
             android:name=".ContactDetailView"
             android:label="@string/title_activity_contact_detail_view"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".DetailScreen"></activity>
     </application>
 
 </manifest>
