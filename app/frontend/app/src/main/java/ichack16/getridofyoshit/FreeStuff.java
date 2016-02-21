@@ -34,8 +34,6 @@ public class FreeStuff {
         int newWidth = (int)((double)image.getWidth() * scale);
         int newHeight = (int)((double)image.getHeight() * scale);
 
-        System.out.println(scale + " " + newWidth + " " + newHeight);
-
         return Bitmap.createScaledBitmap(image, newWidth, newHeight, true);
     }
 
@@ -82,8 +80,6 @@ public class FreeStuff {
 
     String encodedImage = Base64.encodeToString(
         byteArrayOutputStream.toByteArray(), Base64.NO_WRAP);
-
-    System.out.println(encodedImage.length());
 
     sb.append("{\n");
     sb.append("\"image\": \"").append(StringEscapeUtils.escapeJson(encodedImage)).append("\",\n");

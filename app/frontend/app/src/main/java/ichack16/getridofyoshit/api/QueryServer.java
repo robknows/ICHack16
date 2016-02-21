@@ -43,16 +43,22 @@ public class QueryServer {
       OutputStream out = connection.getOutputStream();
       BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(out, "UTF-8"));
 
-      System.out.println(newStuff.toString());
-
       writer.write(newStuff.toString());
       writer.flush();
       writer.close();
 
       connection.connect();
 
+      System.out.println(connection.getResponseMessage());
+
+      InputStream in = connection.getInputStream();
+      BufferedReader read = new BufferedReader(new InputStreamReader(in, "UTF-8"));
+
+      System.out.println(buildResponse(read));
+
       return connection.getResponseMessage();
     } catch (Exception e) {
+      System.out.println("Fail");
       return "FAIL";
     }
   }

@@ -129,7 +129,7 @@ public class ContactDetailView extends AppCompatActivity implements OnMapReadyCa
 class AddToServer extends AsyncTask<FreeStuff, Void, String> {
     @Override
     protected String doInBackground(FreeStuff... freeStuff) {
-        QueryServer qs = new QueryServer("http://localhost:8000");
+        QueryServer qs = new QueryServer("http://ec2-52-30-60-12.eu-west-1.compute.amazonaws.com");
         return qs.addStuff(freeStuff[0]);
     }
 }
