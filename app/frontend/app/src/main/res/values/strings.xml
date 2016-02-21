@@ -8,4 +8,5 @@
     <string name="title_activity_describe_item">DescribeItem</string>
     <string name="title_activity_take_map_view">Map</string>
     <string name="title_activity_contact_detail_view">ContactDetailView</string>
+    <string name="google_app_id">1:226770976467:android:ff4a96c3c207af71</string>
 </resources>
