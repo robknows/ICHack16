@@ -19,7 +19,7 @@ public class FreeStuff {
   private final Location location;
 
   public FreeStuff(Bitmap image, String name, String description, String telephoneNumber, Location location) {
-    this.image = Bitmap.createScaledBitmap(image, 100, 100, true);
+    this.image = Bitmap.createScaledBitmap(image, 400, 400, true);
     this.name = name;
     this.description = description;
     this.telephoneNumber = telephoneNumber;
@@ -65,8 +65,7 @@ public class FreeStuff {
   public String toString() {
     StringBuilder sb = new StringBuilder();
     ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-    int MAXIMUM_QUALITY = 100;
-    image.compress(Bitmap.CompressFormat.JPEG, 0, byteArrayOutputStream);
+    image.compress(Bitmap.CompressFormat.JPEG, 10, byteArrayOutputStream);
 
     String encodedImage = Base64.encodeToString(
         byteArrayOutputStream.toByteArray(), Base64.DEFAULT);
