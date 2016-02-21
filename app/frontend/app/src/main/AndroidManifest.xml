@@ -13,6 +13,7 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.CALL_PHONE" />
+
     <uses-feature android:name="android.hardware.camera" />
 
     <application
@@ -24,7 +25,7 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".GiveOrTake"
-            android:label="Give or Take"
+            android:label="Treasure"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -43,12 +44,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-
-
         <activity
             android:name=".DescribeItem"
-            android:label="@string/title_activity_describe_item"
+            android:label="Describe"
             android:theme="@style/AppTheme.NoActionBar" />
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
@@ -64,12 +62,18 @@
 
         <activity
             android:name=".TakeMapView"
-            android:label="@string/title_activity_take_map_view" />
+            android:label="Map" />
         <activity
             android:name=".ContactDetailView"
-            android:label="@string/title_activity_contact_detail_view"
+            android:label="Contact"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".DetailScreen"></activity>
+        <activity
+            android:name=".DetailScreen"
+            android:label="Details" />
+        <activity
+            android:name=".ThankYou"
+            android:label="@string/title_activity_thank_you"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>

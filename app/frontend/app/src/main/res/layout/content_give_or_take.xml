@@ -38,7 +38,7 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="Give or recieve stuff for free!"
+            android:text="Give or receive stuff for free!"
             android:id="@+id/textView"
             android:layout_weight="0.1"
             android:focusableInTouchMode="false"
