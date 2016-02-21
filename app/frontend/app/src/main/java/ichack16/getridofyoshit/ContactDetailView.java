@@ -26,7 +26,6 @@ import com.google.android.gms.maps.model.LatLng;
 import ichack16.getridofyoshit.api.QueryServer;
 
 public class ContactDetailView extends AppCompatActivity implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
-
     private GoogleApiClient mGoogleApiClient;
     private android.location.Location mLastLocation;
     private GoogleMap map;
@@ -61,8 +60,7 @@ public class ContactDetailView extends AppCompatActivity implements OnMapReadyCa
             // to handle the case where the user grants the permission. See the documentation
             // for ActivityCompat#requestPermissions for more details.
         }
-        mLastLocation = LocationServices.FusedLocationApi.getLastLocation(
-                mGoogleApiClient);
+        mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
         if (mLastLocation == null) {
             System.out.println("Error shite");
             finish();
