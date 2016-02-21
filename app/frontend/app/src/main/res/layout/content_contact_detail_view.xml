@@ -47,7 +47,7 @@
                 android:layout_marginTop="20dp" />
 
             <Button
-                android:layout_width="wrap_content"
+                android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:text="Give!"
                 android:id="@+id/button_give_item"

@@ -52,7 +52,8 @@
             android:onClick="onButtonContinuePressed"
             android:clickable="false"
             android:enabled="true"
-            android:layout_marginTop="10dp" />
+            android:layout_marginTop="10dp"
+            android:layout_weight="0.05" />
 
     </LinearLayout>
 
