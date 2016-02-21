@@ -6,8 +6,6 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
@@ -16,7 +14,6 @@ import android.widget.EditText;
 import ichack16.getridofyoshit.api.QueryServer;
 
 public class ContactDetailView extends AppCompatActivity {
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,16 +36,13 @@ public class ContactDetailView extends AppCompatActivity {
         Intent intent = new Intent(this, GiveOrTake.class);
         startActivity(intent);
     }
-
 }
 
 class AddToServer extends AsyncTask<FreeStuff, Void, String> {
-
     @Override
     protected String doInBackground(FreeStuff... freeStuff) {
         QueryServer qs = new QueryServer("http://ec2-52-30-60-12.eu-west-1.compute.amazonaws.com");
-        String ret = qs.addStuff(freeStuff[0]);
-        return ret;
+        return qs.addStuff(freeStuff[0]);
     }
 
 }

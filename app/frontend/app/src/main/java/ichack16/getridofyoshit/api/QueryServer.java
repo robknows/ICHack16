@@ -25,7 +25,6 @@ import ichack16.getridofyoshit.FreeStuff;
 import ichack16.getridofyoshit.Location;
 
 public class QueryServer {
-
   private final String serverURL;
   private static final String ADD_API = "/add/";
   private static final String SEARCH_API = "/search/";
