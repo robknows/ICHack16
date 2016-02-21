@@ -41,32 +41,15 @@
             android:autoLink="phone|email"
             android:linksClickable="true" />
 
-        <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="match_parent"
+        <Button
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:text="No"
+            android:id="@+id/dontTakeBtn"
+            android:layout_weight="0.41"
             android:layout_gravity="center_horizontal"
-            android:layout_weight="1"
-            android:weightSum="2">
+            android:clickable="true"
+            android:onClick="onNoButtonPressed" />
 
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="No"
-                android:id="@+id/dontTakeBtn"
-                android:layout_weight="1"
-                android:layout_gravity="center_vertical"
-                android:clickable="true"
-                android:onClick="onNoButtonPressed" />
-
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Take It!"
-                android:id="@+id/takeItBtn"
-                android:layout_weight="1"
-                android:layout_gravity="center_vertical"
-                android:clickable="true" />
-        </LinearLayout>
     </LinearLayout>
 </RelativeLayout>

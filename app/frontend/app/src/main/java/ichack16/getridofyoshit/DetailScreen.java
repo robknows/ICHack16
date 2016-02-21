@@ -3,14 +3,19 @@ package ichack16.getridofyoshit;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Base64;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.w3c.dom.Text;
 
 public class DetailScreen extends AppCompatActivity {
@@ -20,30 +25,39 @@ public class DetailScreen extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail_screen);
 
-        FreeStuff item = (FreeStuff) this.getIntent().getSerializableExtra("Item");
+        String itemjson = this.getIntent().getStringExtra("Item");
 
-        ImageView image = (ImageView) findViewById(R.id.image);
-        image.setImageBitmap(item.getImage());
+        try {
+            JSONObject data = new JSONObject(itemjson);
 
-        TextView description = (TextView) findViewById(R.id.description);
-        description.setText(item.getDescription());
+            String description = data.getString("description");
+            String name = data.getString("name");
+            String telephoneNumber = data.getString("telephoneNumber");
 
-        TextView contactDetails = (TextView) findViewById(R.id.contactDetails);
-        contactDetails.setText(item.getTelephoneNumber());
+            JSONObject jsonLocation = data.getJSONObject("location");
+
+            Location thisLocation = new Location(jsonLocation.getDouble("lat"), jsonLocation.getDouble("lon"));
+
+            byte[] decodedImage = Base64.decode(data.getString("image"), 0);
+
+            Bitmap image = BitmapFactory.decodeByteArray(decodedImage, 0, decodedImage.length);
+
+            FreeStuff item = new FreeStuff(image, name, description, telephoneNumber, thisLocation);
+
+            ImageView imageview = (ImageView) findViewById(R.id.image);
+            imageview.setImageBitmap(item.getImage());
+
+            TextView descriptionview = (TextView) findViewById(R.id.description);
+            descriptionview.setText(item.getDescription());
+
+            TextView contactDetails = (TextView) findViewById(R.id.contactDetails);
+            contactDetails.setText(item.getTelephoneNumber());
+        } catch (JSONException e) {
+            finish();
+        }
     }
 
     public void onNoButtonPressed(View view) {
         finish();
-    }
-
-    public void onTakeButtonPressed(View view) {
-        Intent call = new Intent(Intent.ACTION_CALL);
-        call.setData(Uri.parse("tel:" + ((TextView) findViewById(R.id.contactDetails)).getText()));
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
-            return;
-        }
-        startActivity(call);
-        Intent start = new Intent(this, GiveOrTake.class);
-        startActivity(start);
     }
 }

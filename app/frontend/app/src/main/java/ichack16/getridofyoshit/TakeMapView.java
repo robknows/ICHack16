@@ -58,7 +58,7 @@ public class TakeMapView extends FragmentActivity implements OnMapReadyCallback 
 
     public void goToDetailScreen(FreeStuff item) {
         Intent intent = new Intent(this, DetailScreen.class);
-        intent.putExtra("Item", item);
+        intent.putExtra("Item", item.toString());
         startActivity(intent);
     }
 

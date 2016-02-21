@@ -11,7 +11,7 @@ import java.io.Serializable;
 /**
  * Created by fangyi on 20/02/2016.
  */
-public class FreeStuff implements Serializable {
+public class FreeStuff {
   private final Bitmap image;
   private final String name;
   private final String description;
