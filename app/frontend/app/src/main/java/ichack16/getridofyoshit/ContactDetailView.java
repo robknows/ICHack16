@@ -27,7 +27,7 @@ public class ContactDetailView extends AppCompatActivity {
         Uri imageUri = getIntent().getParcelableExtra("image");
         Bitmap image = BitmapFactory.decodeFile(DescribeItem.removePrefixFromFilename(imageUri.toString()));
         String contact = ((EditText) findViewById(R.id.text_telephone)).getText().toString();
-        double latitude = 0;
+        double latitude = 51;
         double longitude = 0;
         FreeStuff freeStuff = new FreeStuff(image, "", description, contact, new Location(latitude, longitude));
 

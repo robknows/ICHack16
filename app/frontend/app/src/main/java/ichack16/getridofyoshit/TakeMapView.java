@@ -1,6 +1,9 @@
 package ichack16.getridofyoshit;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.os.AsyncTask;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 
@@ -10,6 +13,10 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+
+import java.util.List;
+
+import ichack16.getridofyoshit.api.QueryServer;
 
 public class TakeMapView extends FragmentActivity implements OnMapReadyCallback {
     private GoogleMap map;
@@ -38,17 +45,42 @@ public class TakeMapView extends FragmentActivity implements OnMapReadyCallback 
 
         LatLng currentLocation = getCurrentLocation().toLatLng();
 
-        map.addMarker(new MarkerOptions().position(currentLocation).title("Your location"));
+        new ReadFromServer().execute(map);
+
         map.moveCamera(CameraUpdateFactory.newLatLng(currentLocation));
     }
 
     private Location getCurrentLocation() {
-        return new Location(51, 0);
+        return new Location(52, 0);
     }
 
     public void goToDetailScreen(FreeStuff item) {
         Intent intent = new Intent(this, DetailScreen.class);
         intent.putExtra("Item", item);
         startActivity(intent);
+    }
+}
+
+class ReadFromServer extends AsyncTask<GoogleMap, Void, List<FreeStuff>> {
+
+    private GoogleMap map;
+
+    @Override
+    protected List<FreeStuff> doInBackground(GoogleMap... params) {
+        QueryServer queryServer = new QueryServer("http://ec2-52-30-60-12.eu-west-1.compute.amazonaws.com");
+        List<FreeStuff> freeStuff = queryServer.freeStuffNearTo(new Location(51, 0));
+        map = params[0];
+
+        return freeStuff;
+    }
+
+    public void onPostExecute(List<FreeStuff> freeStuff) {
+        for (FreeStuff freeItem : freeStuff) {
+            assert(freeItem != null);
+            LatLng position = freeItem.getLocation().toLatLng();
+            String description = freeItem.getDescription();
+            assert(position != null);
+            map.addMarker(new MarkerOptions().position(position).title(description));
+        }
     }
 }
