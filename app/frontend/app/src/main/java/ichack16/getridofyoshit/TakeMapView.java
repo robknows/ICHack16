@@ -1,14 +1,12 @@
 package ichack16.getridofyoshit;
 
 import android.Manifest;
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.location.LocationManager;
 import android.os.AsyncTask;
+import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
-import android.os.Bundle;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -31,11 +29,18 @@ public class TakeMapView extends FragmentActivity implements OnMapReadyCallback,
     private GoogleMap map;
     private Map<Marker, FreeStuff> markers = new HashMap<>();
     private GoogleApiClient mGoogleApiClient;
-    private android.location.Location mLastLocation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        initialiseGoogleApiClient();
+        setContentView(R.layout.activity_take_map_view);
+        // Obtain the SupportMapFragment and get notified when the map is ready to be used.
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
+        mapFragment.getMapAsync(this);
+    }
+
+    private void initialiseGoogleApiClient() {
         if (mGoogleApiClient == null) {
             mGoogleApiClient = new GoogleApiClient.Builder(this)
                     .addConnectionCallbacks(this)
@@ -43,11 +48,6 @@ public class TakeMapView extends FragmentActivity implements OnMapReadyCallback,
                     .addApi(LocationServices.API)
                     .build();
         }
-
-        setContentView(R.layout.activity_take_map_view);
-        // Obtain the SupportMapFragment and get notified when the map is ready to be used.
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
-        mapFragment.getMapAsync(this);
     }
 
     /**
@@ -73,18 +73,15 @@ public class TakeMapView extends FragmentActivity implements OnMapReadyCallback,
 
     @Override
     public void onConnected(Bundle connectionHint) {
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this,
-                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 0
-                    );
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
+        boolean fineLocationPermissionDenied = ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED;
+        boolean coarseLocationPermissionDenied = ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED;
+
+        if (fineLocationPermissionDenied && coarseLocationPermissionDenied) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 0);
         }
-        mLastLocation = LocationServices.FusedLocationApi.getLastLocation(
-                mGoogleApiClient);
+
+        android.location.Location mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
+
         if (mLastLocation == null) {
             System.out.println("Error shite");
             finish();
@@ -99,12 +96,10 @@ public class TakeMapView extends FragmentActivity implements OnMapReadyCallback,
 
     @Override
     public void onConnectionSuspended(int i) {
-
     }
 
     @Override
     public void onConnectionFailed(ConnectionResult connectionResult) {
-
     }
 
     protected void onStart() {
@@ -118,17 +113,14 @@ public class TakeMapView extends FragmentActivity implements OnMapReadyCallback,
     }
 
     private class InfoWindowClickListener implements GoogleMap.OnInfoWindowClickListener {
-
         @Override
         public void onInfoWindowClick(Marker marker) {
             goToDetailScreen(markers.get(marker));
         }
     }
-
 }
 
 class ReadFromServer extends AsyncTask<GoogleMap, Void, List<FreeStuff>> {
-
     private GoogleMap map;
     private Map<Marker, FreeStuff> markers;
     private Location location;
@@ -143,16 +135,15 @@ class ReadFromServer extends AsyncTask<GoogleMap, Void, List<FreeStuff>> {
         QueryServer queryServer = new QueryServer("http://ec2-52-30-60-12.eu-west-1.compute.amazonaws.com");
         List<FreeStuff> freeStuff = queryServer.freeStuffNearTo(location);
         map = params[0];
-
         return freeStuff;
     }
 
     public void onPostExecute(List<FreeStuff> freeStuff) {
         for (FreeStuff freeItem : freeStuff) {
-            assert(freeItem != null);
+            assert (freeItem != null);
             LatLng position = freeItem.getLocation().toLatLng();
             String description = freeItem.getDescription();
-            assert(position != null);
+            assert (position != null);
             Marker marker = map.addMarker(new MarkerOptions().position(position).title(description));
             markers.put(marker, freeItem);
         }
