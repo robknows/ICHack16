@@ -94,7 +94,7 @@ public class TakeMapView extends FragmentActivity implements OnMapReadyCallback,
 
         new ReadFromServer(markers, new Location(mLastLocation.getLatitude(), mLastLocation.getLongitude())).execute(map);
 
-        map.moveCamera(CameraUpdateFactory.newLatLng(currentLocation));
+        map.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, 15));
     }
 
     @Override
