@@ -26,30 +26,31 @@
             android:contentDescription="Item image" />
 
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/description"
-            android:layout_gravity="center_horizontal"
+            android:layout_gravity="center"
             android:layout_weight="1" />
 
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/contactDetails"
-            android:layout_gravity="center_horizontal"
+            android:layout_gravity="center"
             android:layout_weight="1"
             android:autoLink="phone|email"
             android:linksClickable="true" />
 
         <Button
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="No"
             android:id="@+id/dontTakeBtn"
             android:layout_weight="0.41"
-            android:layout_gravity="center_horizontal"
+            android:layout_gravity="center"
             android:clickable="true"
-            android:onClick="onNoButtonPressed" />
+            android:onClick="onNoButtonPressed"
+            android:elegantTextHeight="false" />
 
     </LinearLayout>
 </RelativeLayout>
