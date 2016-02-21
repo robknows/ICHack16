@@ -63,12 +63,6 @@ public class TakeMapView extends FragmentActivity implements OnMapReadyCallback,
     public void onMapReady(GoogleMap googleMap) {
         map = googleMap;
         map.setOnInfoWindowClickListener(new InfoWindowClickListener());
-
-        LatLng currentLocation = new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude());
-
-        new ReadFromServer(markers).execute(map);
-
-        map.moveCamera(CameraUpdateFactory.newLatLng(currentLocation));
     }
 
     public void goToDetailScreen(FreeStuff item) {
@@ -95,6 +89,12 @@ public class TakeMapView extends FragmentActivity implements OnMapReadyCallback,
             System.out.println("Error shite");
             finish();
         }
+
+        LatLng currentLocation = new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude());
+
+        new ReadFromServer(markers, new Location(mLastLocation.getLatitude(), mLastLocation.getLongitude())).execute(map);
+
+        map.moveCamera(CameraUpdateFactory.newLatLng(currentLocation));
     }
 
     @Override
@@ -131,15 +131,17 @@ class ReadFromServer extends AsyncTask<GoogleMap, Void, List<FreeStuff>> {
 
     private GoogleMap map;
     private Map<Marker, FreeStuff> markers;
+    private Location location;
 
-    public ReadFromServer(Map<Marker, FreeStuff> markers) {
+    public ReadFromServer(Map<Marker, FreeStuff> markers, Location location) {
         this.markers = markers;
+        this.location = location;
     }
 
     @Override
     protected List<FreeStuff> doInBackground(GoogleMap... params) {
         QueryServer queryServer = new QueryServer("http://ec2-52-30-60-12.eu-west-1.compute.amazonaws.com");
-        List<FreeStuff> freeStuff = queryServer.freeStuffNearTo(new Location(51, 0));
+        List<FreeStuff> freeStuff = queryServer.freeStuffNearTo(location);
         map = params[0];
 
         return freeStuff;
