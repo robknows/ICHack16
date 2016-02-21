@@ -29,7 +29,6 @@ import ichack16.getridofyoshit.api.QueryServer;
 
 public class ContactDetailView extends AppCompatActivity implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
     private GoogleApiClient mGoogleApiClient;
-    private android.location.Location mLastLocation;
     private LatLng finalLocation;
     private GoogleMap map;
 
@@ -63,7 +62,7 @@ public class ContactDetailView extends AppCompatActivity implements OnMapReadyCa
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 0);
         }
 
-        mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
+        android.location.Location mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
 
         if (mLastLocation == null) {
             System.out.println("Error shite");
