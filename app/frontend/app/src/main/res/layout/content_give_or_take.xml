@@ -10,7 +10,8 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="ichack16.getridofyoshit.GiveOrTake"
-    tools:showIn="@layout/activity_give_or_take">
+    tools:showIn="@layout/activity_give_or_take"
+    android:background="#003366">
 
     <LinearLayout
         android:orientation="vertical"
@@ -29,7 +30,9 @@
             android:layout_above="@+id/Take"
             android:layout_alignParentStart="false"
             android:layout_marginBottom="0dp"
-            android:layout_weight="0.4" />
+            android:layout_weight="0.4"
+            android:background="#6699CC"
+            android:textSize="30dp" />
 
         <TextView
             android:layout_width="fill_parent"
@@ -41,7 +44,9 @@
             android:focusableInTouchMode="false"
             android:focusable="false"
             android:textAlignment="center"
-            android:gravity="center_vertical|center_horizontal" />
+            android:gravity="center_vertical|center_horizontal"
+            android:autoText="false"
+            android:textColor="#FFFFFF" />
 
         <Button
             android:layout_width="fill_parent"
@@ -53,7 +58,9 @@
             android:layout_alignParentEnd="true"
             android:layout_marginBottom="0dp"
             android:layout_alignParentStart="false"
-            android:layout_weight="0.38" />
+            android:layout_weight="0.4"
+            android:background="#6699CC"
+            android:textSize="30dp" />
 
     </LinearLayout>
 </RelativeLayout>

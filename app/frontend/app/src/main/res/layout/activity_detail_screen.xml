@@ -7,7 +7,8 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="ichack16.getridofyoshit.DetailScreen">
+    tools:context="ichack16.getridofyoshit.DetailScreen"
+    android:background="#003366">
 
     <LinearLayout
         android:orientation="vertical"
@@ -29,17 +30,23 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/description"
-            android:layout_gravity="center"
-            android:layout_weight="1" />
+            android:layout_weight="1"
+            android:textColor="#FFFFFF"
+            android:gravity="center_horizontal"
+            android:textSize="20dp"
+            android:layout_marginTop="20dp" />
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/contactDetails"
-            android:layout_gravity="center"
             android:layout_weight="1"
             android:autoLink="phone|email"
-            android:linksClickable="true" />
+            android:linksClickable="true"
+            android:textColor="#FFFFFF"
+            android:gravity="center_horizontal"
+            android:textSize="20dp"
+            android:layout_marginTop="5dp" />
 
         <Button
             android:layout_width="match_parent"
@@ -50,7 +57,9 @@
             android:layout_gravity="center"
             android:clickable="true"
             android:onClick="onNoButtonPressed"
-            android:elegantTextHeight="false" />
+            android:elegantTextHeight="false"
+            android:background="#6699cc"
+            android:textSize="20dp" />
 
     </LinearLayout>
 </RelativeLayout>
