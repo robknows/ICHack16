@@ -28,23 +28,32 @@
             android:layout_gravity="center_horizontal"
             android:layout_weight="2" />
 
-        <EditText
+        <LinearLayout
+            android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="phone"
-            android:ems="10"
-            android:id="@+id/text_telephone"
-            android:layout_gravity="center_horizontal"
-            android:layout_weight="0.5"
-            android:hint="Enter your contact details" />
+            android:layout_height="match_parent"
+            android:layout_weight="2"
+            android:weightSum="2">
 
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Give!"
-            android:id="@+id/button_give_item"
-            android:layout_gravity="center_horizontal"
-            android:layout_weight="0.5"
-            android:onClick="onButtonGivePressed" />
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="phone"
+                android:ems="10"
+                android:id="@+id/text_telephone"
+                android:layout_gravity="center_horizontal"
+                android:layout_weight="1"
+                android:hint="Enter your contact details" />
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Give!"
+                android:id="@+id/button_give_item"
+                android:layout_gravity="center_horizontal"
+                android:layout_weight="1"
+                android:onClick="onButtonGivePressed" />
+        </LinearLayout>
+
     </LinearLayout>
 </RelativeLayout>
