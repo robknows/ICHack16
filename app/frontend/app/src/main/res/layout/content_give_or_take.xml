@@ -12,22 +12,48 @@
     tools:context="ichack16.getridofyoshit.GiveOrTake"
     tools:showIn="@layout/activity_give_or_take">
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Give"
-        android:id="@+id/Give"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="78dp"
-        android:onClick="onGiveButtonPressed" />
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:weightSum="1"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true">
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Take"
-        android:id="@+id/Take"
-        android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true"
-        android:onClick="onTakeButtonPressed" />
+        <Button
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="Give"
+            android:id="@+id/Give"
+            android:onClick="onGiveButtonPressed"
+            android:layout_above="@+id/Take"
+            android:layout_alignParentStart="false"
+            android:layout_marginBottom="0dp"
+            android:layout_weight="0.4" />
+
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="Give or recieve stuff for free!"
+            android:id="@+id/textView"
+            android:layout_weight="0.1"
+            android:focusableInTouchMode="false"
+            android:focusable="false"
+            android:textAlignment="center"
+            android:gravity="center_vertical|center_horizontal" />
+
+        <Button
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="Take"
+            android:id="@+id/Take"
+            android:onClick="onTakeButtonPressed"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginBottom="0dp"
+            android:layout_alignParentStart="false"
+            android:layout_weight="0.4" />
+
+    </LinearLayout>
 </RelativeLayout>
