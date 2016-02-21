@@ -71,15 +71,19 @@ public class TakeMapView extends FragmentActivity implements OnMapReadyCallback,
         startActivity(intent);
     }
 
-    @Override
-    public void onConnected(Bundle connectionHint) {
+    private void assertLocationPermissions() {
         boolean fineLocationPermissionDenied = ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED;
         boolean coarseLocationPermissionDenied = ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED;
 
         if (fineLocationPermissionDenied && coarseLocationPermissionDenied) {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 0);
         }
+    }
 
+    @Override
+    public void onConnected(Bundle connectionHint) {
+        assertLocationPermissions();
+        @SuppressWarnings("ResourceType")
         android.location.Location mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
 
         if (mLastLocation == null) {

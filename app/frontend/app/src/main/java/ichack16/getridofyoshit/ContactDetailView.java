@@ -54,14 +54,23 @@ public class ContactDetailView extends AppCompatActivity implements OnMapReadyCa
     }
 
     @Override
-    public void onConnected(Bundle connectionHint) {
+    public void onMapReady(GoogleMap googleMap) {
+        map = googleMap;
+    }
+
+    private void assertLocationPermissions() {
         boolean fineLocationPermissionDenied = ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED;
         boolean coarseLocationPermissionDenied = ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED;
 
         if (fineLocationPermissionDenied && coarseLocationPermissionDenied) {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 0);
         }
+    }
 
+    @Override
+    public void onConnected(Bundle connectionHint) {
+        assertLocationPermissions();
+        @SuppressWarnings("ResourceType")
         android.location.Location mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
 
         if (mLastLocation == null) {
@@ -97,11 +106,11 @@ public class ContactDetailView extends AppCompatActivity implements OnMapReadyCa
         super.onStart();
     }
 
+
     protected void onStop() {
         mGoogleApiClient.disconnect();
         super.onStop();
     }
-
 
     public void onButtonGivePressed(View view) {
         String description = getIntent().getStringExtra("description");
@@ -114,11 +123,6 @@ public class ContactDetailView extends AppCompatActivity implements OnMapReadyCa
 
         Intent intent = new Intent(this, GiveOrTake.class);
         startActivity(intent);
-    }
-
-    @Override
-    public void onMapReady(GoogleMap googleMap) {
-        map = googleMap;
     }
 }
 
